@@ -1,0 +1,488 @@
+                  
+                              --------------- Anonymous Block ---------------------
+
+1. Create and execute a simple anonymous block that outputs ?Hello
+World.?
+
+->SET SERVEROUTPUT ON
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Hello World');  
+
+END;
+/
+--------------------------------------------------------------------------------------------------
+2. Create and execute a simple anonymous block to display highest salary
+among-st employees
+
+->declare
+   max_salary employees.salary%type;
+begin
+     select max(salary)
+	 into max_salary
+     from employees;
+     dbms_output.put_line('Max Salary '||max_salary);
+end;
+/
+--------------------------------------------------------------------------------------------------
+3. Create PL/SQL block to display details of the employee who earns
+highest salary
+
+->declare
+   eid employees.employee_id%type;
+   ename  employees.last_name%type;
+   sal employees.salary%type;
+   dept_id employees.department_id%type;
+begin
+     select employee_id,last_name,salary,department_id
+	 into eid,ename,sal,dept_id
+     from employees
+	 where salary=(select max(salary)
+	                from employees);
+     dbms_output.put_line('id:'||eid||' name:'||ename||' salary:'||sal||' dept_id:'||dept_id);
+end;
+/
+--------------------------------------------------------------------------------------------------
+4. Create PL/SQL block to display the details for user entered employee_id
+
+->set serveroutput on
+declare
+    sal number;
+    eid number:=&eid;
+    name varchar2(20);
+begin
+  select employee_id,last_name,salary
+  into eid,name,sal
+  from employees
+  where employee_id=eid;
+
+   DBMS_OUTPUT.PUT_LINE('Details::'||eid||' '||name||' '||sal);
+END;
+/
+
+--------------------------------------------------------------------------------------------------
+5. Create PL/SQL block to display details nos. 1 to 10
+
+->set serveroutput on
+DECLARE
+  n number:=1;
+BEGIN
+  FOR n IN 1..10 
+   LOOP
+     DBMS_OUTPUT.PUT_LINE('   '||n);
+  END LOOP;
+      
+  
+END;
+/
+--------------------------------------------------------------------------------------------------
+6. Create block to accept no. from user and check if it is Prime or Not and
+display message accordingly
+
+->Declare
+	n number;
+	i number;
+	flag number;
+ 
+Begin
+	i:=2;
+	flag:=1;
+	n:=&n;
+ 
+	for i in 2..n/2
+	Loop
+		if mod(n,i)=0
+		then
+			flag:=0;
+			exit;
+		end if;
+	End Loop;
+ 
+	if flag=1
+	then
+		dbms_output.put_line('prime');
+	else
+		dbms_output.put_line('not prime');
+	End if;
+End;
+/
+--------------------------------------------------------------------------------------------------
+7. Create PL/SQL block to accept no. from user and check if it is armstrong
+no. or not
+
+->Declare
+n number; 
+    s number:=0; 
+    r number; 
+    len number; 
+    m number;  
+Begin
+    m := n; 
+  n:=&n;
+    len := length(to_char(n)); 
+    while n>0 
+    loop 
+        r := mod(n , 10); 
+        s := s + power(r , len); 
+        n := trunc(n / 10); 
+    end loop; 
+      
+    if m = s 
+    then
+        DBMS_output.put_line('Given number is Armstrong number'); 
+    else
+        DBMS_output.put_line('Given number is not Armstrong number'); 
+    end if; 
+      
+end; 
+/
+--------------------------------------------------------------------------------------------------
+8. Create PL/SQL block to accept radius and calculate and display area
+and circumference of circle
+
+->Declare 
+    area   number;   
+    circumference   number;   
+    radius number;   
+    pi constant number :=3.14;  
+      
+Begin
+         radius:=&radius;
+  
+        area := pi * radius * radius;  
+        circumference := 2 * pi * radius; 
+        dbms_output.Put_line('Area = ' || area);  
+        dbms_output.Put_line('Circumference  = ' || circumference);  
+  
+End;  
+/
+--------------------------------------------------------------------------------------------------
+9. Create PL/SQL block to accept no. and check if it is even or odd
+
+->Declare
+  
+    n Number;
+    r Number; 
+Begin
+    n:=&n;
+    r := MOD(n, 2); 
+  
+    if r = 0 then
+      DBMS_output.Put_line('Even'); 
+    else
+      DBMS_output.Put_line('Odd'); 
+    End if; 
+End; 
+/
+--------------------------------------------------------------------------------------------------
+10. Create PL/SQL block to display details of the employee who do not
+have manager.
+
+->declare
+   eid employees.employee_id%type;
+   ename  employees.last_name%type;
+   sal employees.salary%type;
+   dept_id employees.department_id%type;
+begin
+     select employee_id,last_name,salary,department_id
+	 into eid,ename,sal,dept_id
+     from employees
+	 where manager_id is NULL;
+     dbms_output.put_line('id:'||eid||' name:'||ename||' salary:'||sal||' dept_id:'||dept_id);
+end;
+/
+--------------------------------------------------------------------------------------------------
+
+                                      ---------- Cursors ----------
+
+1. Create PL/SQL block to display details of employees King
+
+->DECLARE
+   eid number;
+   ename varchar2(20);
+
+   CURSOR emp_king IS
+    select employee_id,last_name
+    from employees
+    where last_name = 'King';
+   
+BEGIN
+    
+    OPEN emp_king;
+    
+    LOOP 
+    FETCH emp_king 
+    into eid,ename;
+        EXIT WHEN emp_king%NOTFOUND;
+    DBMS_OUTPUT.PUT_LINE('ID :: '||eid||' name:: '||ename);
+    END LOOP;
+
+    CLOSE emp_king;
+END;
+/
+--------------------------------------------------------------------------------------------------
+2. Create PL/SQL block to display all duplicate names from employees
+
+->declare
+    fname employees.first_name%type;
+    eid number;
+    lname employees.last_name%type;
+   
+   cursor emp IS
+     select employee_id,first_name,last_name
+     from employees e1
+     where 2<=( select count(first_name)
+                from employees e2
+		where e1.last_name=e2.last_name)
+     order by last_name;
+begin
+   OPEN emp;
+   
+   LOOP
+    FETCH emp 
+       into eid,fname,lname;
+    EXIT WHEN emp%NOTFOUND;    
+       DBMS_OUTPUT.PUT_LINE('Details::'||eid||' '||fname||' '||lname);
+   
+   END LOOP;
+  CLOSE emp;
+
+END;
+/
+--------------------------------------------------------------------------------------------------
+3. Create PL/SQL block to accept department_id from user and display
+detail of employees working under this department.
+
+->declare
+    did number:=&did;
+   
+   cursor emp_details IS
+     select employee_id,first_name,last_name,department_id
+     from employees 
+     where department_id=did;
+
+     emp emp_details%ROWTYPE;
+
+begin
+   OPEN emp_details;
+   
+   LOOP
+    FETCH emp_details 
+       into emp;
+    EXIT WHEN emp_details%NOTFOUND;    
+       DBMS_OUTPUT.PUT_LINE('Details::'||emp.employee_id||' '||
+       emp.first_name||' '||emp.last_name||' '||emp.department_id);
+   
+   END LOOP;
+  CLOSE emp_details;
+
+END;
+/
+
+--------------------------------------------------------------------------------------------------
+4. Create PL/SQL block to display highest salary from each department
+->declare
+      
+   cursor emp_sal IS
+     select max(salary)
+     from employees
+     group by department_id
+     order by max(salary);
+
+     sal number;
+
+begin
+   OPEN emp_sal;
+   
+   LOOP
+    FETCH emp_sal 
+       into sal;
+    EXIT WHEN emp_sal%NOTFOUND;    
+       DBMS_OUTPUT.PUT_LINE(sal);
+   
+   END LOOP;
+  CLOSE emp_sal;
+
+END;
+/
+--------------------------------------------------------------------------------------------------
+5. Create PL/SQL block to display details of employees earning highest
+salary in their department
+
+->declare
+      
+   cursor emp_sal IS
+     select employee_id,last_name,department_id,salary
+     from employees e1
+     where salary =(select max(salary)
+		    from employees e2
+		    group by department_id
+		    having e2.department_id=e1.department_id);
+
+     emp emp_sal%ROWTYPE;
+
+begin
+   OPEN emp_sal;
+   
+   LOOP
+    FETCH emp_sal 
+       into emp;
+    EXIT WHEN emp_sal%NOTFOUND;    
+       DBMS_OUTPUT.PUT_LINE('Details::'||emp.employee_id||' '||
+       emp.last_name||' '||emp.salary||' '||emp.department_id);
+   
+   END LOOP;
+  CLOSE emp_sal;
+
+END;
+/
+--------------------------------------------------------------------------------------------------
+6. Create PL/SQL block to display all employees working in Toronto
+
+->declare
+      
+   cursor emp_loc IS
+     	select last_name,job_id,department_id,department_name
+	from employees
+	join departments
+	using(department_id)
+	join locations
+	using(location_id)
+	where city='Toronto';
+     
+    emp emp_loc%ROWTYPE;
+
+begin
+   OPEN emp_loc;
+   
+   LOOP
+    FETCH emp_loc 
+       into emp;
+    EXIT WHEN emp_loc%NOTFOUND;    
+       DBMS_OUTPUT.PUT_LINE('Details:: '||emp.last_name||' '||emp.job_id||' '||
+emp.department_id||' '||emp.department_name);
+   
+   END LOOP;
+  CLOSE emp_loc;
+
+END;
+/
+--------------------------------------------------------------------------------------------------
+7. Create PL/SQL block to display employees hired in month of Aug
+
+->declare
+      
+   cursor emp_aug IS
+     	select last_name,job_id,department_id,hire_date
+	from employees
+	where hire_date like '%AUG%';
+     
+    emp emp_aug%ROWTYPE;
+
+begin
+   OPEN emp_aug;
+   
+   LOOP
+    FETCH emp_aug 
+       into emp;
+    EXIT WHEN emp_aug%NOTFOUND;    
+       DBMS_OUTPUT.PUT_LINE('Details:: '||emp.last_name||' '||emp.job_id||' '||
+emp.department_id||' '||emp.hire_date);
+   
+   END LOOP;
+  CLOSE emp_aug;
+
+END;
+/
+--------------------------------------------------------------------------------------------------
+8. Display eid, full name, salary, job_id, dept_name, city of employees for
+user entered city.
+
+->declare
+      
+   cursor emp_loc IS
+     	select employee_id,first_name||' '||last_name as name,job_id,department_name,city
+	from employees
+	join departments
+	using(department_id)
+	join locations
+	using(location_id)
+	where city='&city';
+     
+    emp emp_loc%ROWTYPE;
+
+begin
+   OPEN emp_loc;
+   
+   LOOP
+    FETCH emp_loc 
+       into emp;
+    EXIT WHEN emp_loc%NOTFOUND;    
+       DBMS_OUTPUT.PUT_LINE('Details:: '||emp.employee_id||' '||emp.name||' '||emp.job_id||' '||
+emp.department_name||' '||emp.city);
+  
+   END LOOP;
+  CLOSE emp_loc;
+
+END;
+/
+
+--------------------------------------------------------------------------------------------------
+9. Create PL/SQL block to display employees who have changed their job
+atleast once
+
+->declare
+      
+   cursor jobchange IS
+	select employee_id,job_id
+	from employees
+	intersect
+	select employee_id,job_id
+	from job_history;
+     
+    emp jobchange%ROWTYPE;
+
+begin
+   OPEN jobchange;
+   
+   LOOP
+    FETCH jobchange 
+       into emp;
+    EXIT WHEN jobchange%NOTFOUND;    
+       DBMS_OUTPUT.PUT_LINE('Details:: '||emp.employee_id||' '||emp.job_id);
+  
+   END LOOP;
+  CLOSE jobchange;
+
+END;
+/
+
+--------------------------------------------------------------------------------------------------
+10. Create PL/SQL block to details of employees earning salary in range
+10000 to 20000
+
+->declare
+      
+   cursor emp_sal IS
+     select employee_id,last_name,department_id,salary
+     from employees e1
+     where salary Between 10000 and 20000;
+
+     emp emp_sal%ROWTYPE;
+
+begin
+   OPEN emp_sal;
+   
+   LOOP
+    FETCH emp_sal 
+       into emp;
+    EXIT WHEN emp_sal%NOTFOUND;    
+       DBMS_OUTPUT.PUT_LINE('Details::'||emp.employee_id||' '||
+       emp.last_name||' '||emp.salary||' '||emp.department_id);
+   
+   END LOOP;
+  CLOSE emp_sal;
+
+END;
+/
+--------------------------------------------------------------------------------------------------
