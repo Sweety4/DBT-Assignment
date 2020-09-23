@@ -1,0 +1,533 @@
+1. First Rewrite /practice all demo queries taught in session
+
+1.1.select upper(last_name),lower(last_name)
+from employees
+where department_id=90;
+
+Output:
+UPPER(LAST_NAME)          LOWER(LAST_NAME)
+------------------------- -------------------------
+KING                      king
+
+1.2.
+select initcap(last_name)
+from employees
+where department_id=90;
+
+Output:
+INITCAP(LAST_NAME)
+-------------------------
+King
+
+1.3.select upper('Hello'),lower('Bye'),initcap('good morning')
+from dual;
+
+Output:
+UPPER LOW INITCAP('GOO
+----- --- ------------
+HELLO bye Good Morning
+
+1.4.select employee_id,last_name,salary
+from employees
+where lower(last_name)='king';
+
+Output:
+EMPLOYEE_ID LAST_NAME                     SALARY
+----------- ------------------------- ----------
+        100 King                           24000
+
+1.5.select substr('Good Morning',1,4)
+from dual;
+
+Output:
+SUBS
+----
+Good
+
+1.6.select substr('Good Morning',2,4)
+from dual;
+
+Output:
+SUBS
+----
+ood
+
+1.7.select substr('Good Morning',2,6)
+from dual;
+
+Output:
+SUBSTR
+------
+ood Mo
+
+1.8.select length('Good Morning')
+from dual;
+
+Output:
+
+LENGTH('GOODMORNING')
+---------------------
+                   12
+
+1.9.select instr('Good Morning','M')
+from dual;
+
+Output:
+INSTR('GOODMORNING','M')
+------------------------
+                       6
+
+1.10.select Replace('Jack and Jue','J','Bl')
+from dual;
+
+Output:
+REPLACE('JACKA
+--------------
+Black and Blue
+
+1.11.select rpad(salary,10,'*')
+from employees
+where department_id=80;
+
+Output:
+RPAD(SALARY,10,'*')
+----------------------------------------
+14000*****
+
+1.12.select trim('H' from 'Hello World')
+from dual;
+
+Output:
+
+TRIM('H'FR
+----------
+ello World
+
+1.13.select trim('h' from 'Hello WorldH')
+from dual;
+
+Output:
+TRIM('H'FROM
+------------
+Hello WorldH
+
+1.14.select trim('W' from 'Hello World')
+from dual;
+
+Output:
+TRIM('W'FRO
+-----------
+Hello World
+
+1.15.select length(concat(first_name,last_name)) "Length"
+from employees;
+
+Output:
+  Length
+----------
+         9
+        10
+
+1.16.select round(65.87)
+from dual;
+
+Output:
+ROUND(65.87)
+------------
+          66
+
+1.17.select round(65.35)
+from dual;
+
+Output:
+ROUND(65.35)
+------------
+          65
+
+1.18.select round(65.35,1)
+from dual;
+
+Output:
+ROUND(65.35,1)
+--------------
+          65.4
+
+1.19.select round(65.358,2)
+from dual;
+
+Output:
+ROUND(65.358,2)
+---------------
+          65.36
+
+1.20.select round(65.358,1)
+from dual;
+
+Output:
+ROUND(65.358,1)
+---------------
+           65.4
+
+1.21.select round(65.358,-1)
+from dual;
+
+Output:
+ROUND(65.358,-1)
+----------------
+              70
+
+1.22.select round(63.358,-1)
+from dual;
+
+Output:
+ROUND(63.358,-1)
+----------------
+              60
+
+1.23.select trunc(65.358,1)
+from dual;
+
+Output:TRUNC(65.358,1)
+---------------
+           65.3
+
+1.24.select trunc(65.358,2)
+from dual;
+
+Output:
+
+TRUNC(65.358,2)
+---------------
+          65.35
+
+1.25.select mod(23,5)
+from dual;
+
+Output:
+
+ MOD(23,5)
+----------
+         3
+
+1.26.select mod(25,5)
+from dual;
+
+Output:
+ MOD(25,5)
+----------
+         0
+
+1.27.select sysdate
+from dual;
+
+Output:
+SYSDATE
+---------
+26-AUG-20
+
+1.28.select employee_id,(sysdate-hire_date)/7 "Weeks"
+from employees
+where department_id=90;
+
+Output:
+EMPLOYEE_ID      Weeks
+----------- ----------
+        100 1732.11326
+
+1.29.select months_between('01-SEP-95','11-JAN-94') "Months"
+from dual;
+
+Output:
+Months
+----------
+19.6774194
+
+
+1.30.select add_months('01-SEP-95',2) "Months"
+from dual;
+
+Output:
+Months
+---------
+01-NOV-95
+
+1.31.select add_months('21-SEP-95',2) "Months"
+from dual;
+
+Output:
+Months
+---------
+21-NOV-95
+
+1.32.select last_day('21-SEP-95') "Last Day"
+from dual;
+
+Output:
+Last Day
+---------
+30-SEP-95
+
+1.33.select last_day('21-FEB-20') "Last Day"
+from dual;
+
+Output:
+Last Day
+---------
+29-FEB-20
+
+1.34.select next_day(sysdate,'Friday') "Next Day"
+from dual;
+
+Output:
+
+Next Day
+---------
+28-AUG-20
+
+1.35.select round(sysdate,'year')
+from dual;
+(sysdate::26-AUG-20)
+
+Output:
+ROUND(SYS
+---------
+01-JAN-21
+
+1.36.select round(sysdate,'month')
+from dual;
+(sysdate::26-AUG-20)
+
+Output:
+ROUND(SYS
+---------
+01-SEP-20
+
+1.37.select hire_date,round(hire_date,'year')
+from employees
+where department_id=90;
+
+Output:
+HIRE_DATE ROUND(HIR
+--------- ---------
+17-JUN-87 01-JAN-87
+
+1.38.select hire_date,round(hire_date,'month')
+from employees
+where department_id=90;
+
+Output:
+HIRE_DATE ROUND(HIR
+--------- ---------
+17-JUN-87 01-JUL-87
+
+1.39.select trunc(sysdate,'year')
+from dual;
+(sysdate::26-AUG-20)
+
+Output:
+TRUNC(SYS
+---------
+01-JAN-20
+
+1.40.select trunc(sysdate,'month')
+from dual;
+(sysdate::26-AUG-20)
+
+Output:
+TRUNC(SYS
+---------
+01-AUG-20
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------
+2. Display full names of employees separated by space and initial letter of
+every word should be in capital, rename column as "Name"
+
+Query:
+select initcap(concat(concat(first_name,' '),last_name))Name
+from employees;
+
+Output:
+SQL> @D:\Demo.sql
+
+NAME
+----------------------------------------------
+Ellen Abel
+Sundar Ande
+---------------------------------------------------------------------------------------------------------------------------------
+3. Display last_name in capital letters
+
+Query:
+select Upper(last_name)
+from employees
+where department_id=90;
+
+
+Output:
+SQL> @D:\Demo.sql
+
+UPPER(LAST_NAME)
+-------------------------
+KING
+KOCHHAR
+DE HAAN
+
+---------------------------------------------------------------------------------------------------------------------------------
+4. Generate login_id for employees consisting  upto 5 characters of
+first_name and initial letter first last_name and underscore as a separator
+
+Query:
+select concat(concat(substr(first_name,1,5),'_'),substr(last_name,1,1))Name
+from employees;
+
+Output:
+SQL> @D:\Demo.sql
+
+NAME
+-------------------------
+Ellen_A
+Sunda_A
+Mozhe_A
+
+---------------------------------------------------------------------------------------------------------------------------------
+5. Display system date through query
+
+Query:
+select sysdate
+from dual;
+
+Output:
+SQL> @D:\Demo.sql
+
+SYSDATE
+---------
+26-AUG-20
+---------------------------------------------------------------------------------------------------------------------------------
+6. Display emp_id,last_name, annual salary rounded to nearest whole
+number .
+
+Query:
+select  employee_id,last_name,salary,round(salary*12) "Annual Salary"
+from employees;
+
+Output:
+SQL> @D:\Demo.sql
+
+EMPLOYEE_ID LAST_NAME                     SALARY Annual Salary
+----------- ------------------------- ---------- -------------
+        100 King                           24000        288000
+        101 Kochhar                        17000        204000
+
+---------------------------------------------------------------------------------------------------------------------------------
+7. Write query to display hike in salary by 15.5% and round to nearest whole
+number
+
+Query:
+select round(15.5),salary
+from employees;
+
+Output:
+SQL> @D:\Demo.sql
+
+ROUND(15.5)     SALARY
+----------- ----------
+         16      24000
+         16      17000
+         16      17000
+         16       9000
+         16       6000
+         16       4800
+---------------------------------------------------------------------------------------------------------------------------------
+8. Modify above query in different script file where you should also display
+revised salary i.e. old salary subtracted from new salary
+
+Query:
+
+Output:
+
+---------------------------------------------------------------------------------------------------------------------------------
+9. Display last_name for employees where starting character will be
+prompted by user and the case should not affect to output
+
+Query:
+select last_name 
+from employees
+where last_name like '&char%';
+
+Output:
+SQL> @D:\Demo.sql
+Enter value for char: S
+old   3: where lower(last_name) like '&char%'
+new   3: where lower(last_name) like 's%'
+
+LAST_NAME
+-------------------------
+Sarchand
+Sciarra
+
+---------------------------------------------------------------------------------------------------------------------------------
+10. Display last_name and length of last-name  whose names start with 'J'
+or 'H' or 'T'. Sort data in alphabetical order of names
+
+Query:
+select last_name,length(last_name)
+from employees
+where substr(last_name,1,1)in('J','H','T');
+
+Output:
+
+SQL> @D:\Demo.sql
+
+LAST_NAME                 LENGTH(LAST_NAME)
+------------------------- -----------------
+Hall                                      4
+Hartstein                                 9
+---------------------------------------------------------------------------------------------------------------------------------
+11. HR department wants to check for how many months every employee
+has worked with the organization sort data by order of months. (Hint:
+calculate months between todays date and hire_date)
+
+Query:
+select employee_id,concat(concat(first_name,' '),last_name) Name,hire_date,round(months_between(sysdate,hire_date))as Months
+from employees
+order by months;
+
+Output:
+SQL> @D:\Demo.sql
+
+EMPLOYEE_ID NAME                                           HIRE_DATE     MONTHS
+----------- ---------------------------------------------- --------- ----------
+        173 Sundita Kumar                                  21-APR-00        244
+        167 Amit Banda                                     21-APR-00        244
+        166 Sundar Ande                                    24-MAR-00        244                           
+---------------------------------------------------------------------------------------------------------------------------------
+12. Display last_name of employee and indicate the amount of their
+salaries with asterisks. Each asterisk signifies a thousand dollars sort data in
+desending order of salary. Eg: king earns 24,000 so 24 asterisks should be displayed and not the salary.
+
+Query:
+select last_name Name,salary,rpad('*',substr(salary,1,2),'*')
+from employees
+order by salary desc;
+
+Output:
+
+SQL> @D:\Demo.sql
+
+NAME                          SALARY
+------------------------- ----------
+RPAD('*',SUBSTR(SALARY,1,2),'*')
+--------------------------------------------------------------------------------
+King                           24000
+************************
+
+
+---------------------------------------------------------------------------------------------------------------------------------

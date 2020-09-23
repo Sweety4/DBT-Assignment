@@ -1,0 +1,446 @@
+Sub-Queries:
+
+->select last_name from employees where last_name='Abel';
+
+->select last_name from employees where salary >11000;
+
+->select last_name from employees where salary >(select salary from employees where last_name='Abel');
+
+single _Row Subqueries :
+
+->select last_name from employees where salary >(select salary from employees where last_name='Abel');
+
+Q. Display names of employees working in "sales" department.
+
+->select last_name from employees where department_id >(select department_id  from departments where department_name='Sales');
+
+Q.Display details of employees having same job_id as "Abel" but, earns more than "Abel".
+
+->select last_name,job_id,salary 
+from employees 
+where job_id =(select job_id  
+              from employees 
+              where last_name='Abel')
+And salary> (select salary  
+            from employees 
+            where last_name='Abel');
+
+Q.Dispaly min salary .
+->select last_name,job_id,salary 
+from employees 
+where salary = (select MIN(salary) 
+                from employees);
+
+Q.Display minimun salary department wise but only for those department whose min salary is greater than the min salary of  department_id =50.
+
+->select department_id,min(salary) 
+from employees 
+group by department_id
+having min(salary)>(select min(salary)
+                from employees
+                where department_id=50);
+
+OR (without using group by clause and having clause)
+
+->select last_name,department_id,salary 
+from employees 
+where salary=(select min(salary)
+                from employees
+                where department_id=50);
+
+Q.
+
+->select last_name from employees where salary >(select salary from employees where last_name='ABCD');
+ans:there is no thst such name like a "ABCD" in database so the output is no row selected.
+
+
+
+->select last_name,salary 
+from employees 
+where salary=(select min(salary)
+                from employees
+                Group By department_id);
+
+Ans: Wrong query bcz in single row subquery 
+
+
+Mult Row SubQuery:
+
+Q.Display details of employees earning same as min salary amongst any department.
+
+->select last_name,department_id,salary 
+from employees 
+where salary IN (select min(salary)
+                from employees
+                Group By department_id);
+
+
+->select last_name,department_id,salary 
+from employees 
+where salary  not IN (select min(salary)
+                from employees
+                Group By department_id);
+
+
+Q.Job_id and salary is same .
+
+->select last_name,job_id,salary 
+from employees 
+where job_id IN(select job_id  
+              from employees 
+              where last_name='Taylor')
+And salary IN (select salary  
+            from employees 
+            where last_name='Taylor');
+
+
+Q.Display details of employee who earn less than any.
+
+->select salary
+from employees 
+where job_id='IT_PROG';
+
+->select employee_id,last_name,job_id,salary
+from employees
+where salary > ANY(select salary
+                  from employees 
+                  where job_id='IT_PROG');
+ 
+
+ 
+->select employee_id,last_name,job_id,salary
+from employees
+where salary < ANY(select salary
+                  from employees 
+                  where job_id='IT_PROG')
+and
+job_id <> 'IT_PROG';
+ 
+ALL Operator:
+
+->select employee_id,last_name,job_id,salary
+from employees
+where salary < All(select salary
+                  from employees 
+                  where job_id='IT_PROG')
+and
+job_id <> 'IT_PROG';
+
+ALL operator using greater . 
+->select employee_id,last_name,job_id,salary
+from employees
+where salary > All(select salary
+                  from employees 
+                  where job_id='IT_PROG')
+and
+job_id <> 'IT_PROG';
+
+
+correlated subQueries:
+
+->select department_id,avg(salary) from employees group by department_id;
+
+Q. Find all employees who earn more than the avg salary in their department.
+
+->select department_id,avg(salary) from employees group by department_id;
+
+->select last_name,salary,department_id
+from employees
+where salary> Any(select min(salary)
+             from employees
+            group by department_id);
+
+
+->select last_name,salary,department_id
+from employees e1
+where salary>(select min(salary)
+              from employees e2
+              where e2.department_id=e1.department_id);
+
+->select last_name,salary,department_id
+from employees e1
+where salary>(select min(salary)
+              from employees e2
+              group by department_id
+              having e2.department_id=e1.department_id)
+order by department_id;
+             
+Q.Display only duplicate names from emp table.(interview ques)
+
+->select first_name,last_name
+from employees e1
+where 2<=(select count(last_name)
+            from employees e2
+            where e2.last_name=e1.last_name);
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+                                           -------------Assignment -----------------
+
+
+1. The HR department wants to determine the names of all the employees
+who were hired after  Davies. Create a query to display the name and hire
+date of any employee hired after employee  Davies.
+
+->select first_name,last_name,hire_date
+from employees
+where hire_date >(select hire_date
+                  from employees
+                  where last_name='Davies');
+           
+------------------------------------------------------------------------------------------------------------------------------
+2. Display employee details who earns more than employee 'Abel'
+
+->select last_name,job_id,salary 
+from employees 
+where job_id =(select job_id  
+              from employees 
+              where last_name='Abel')
+And salary> (select salary  
+            from employees 
+            where last_name='Abel');
+------------------------------------------------------------------------------------------------------------------------------
+3. Display empid,last_name,salary,job for emloyees working in department
+same as 'Taylor' and earns less than him
+
+->select employee_id,last_name,department_id,salary 
+from employees outer
+where job_id in(select job_id 
+               from employees
+               where last_name='Taylor')
+AND
+salary< all(select salary 
+            from employees 
+            where last_name='Taylor')
+order by salary;
+------------------------------------------------------------------------------------------------------------------------------
+4. Display employee details who earns minimum salary
+
+->select last_name,job_id,salary 
+from employees 
+where salary = (select MIN(salary) 
+                from employees);
+------------------------------------------------------------------------------------------------------------------------------
+5. Display department-wise dept_id,salary for those departments whose
+max salary is more than 10000
+
+->select department_id,salary 
+from employees
+where salary > ALL(select salary 
+                  from employees
+                 where salary=10000)
+order by department_id;
+------------------------------------------------------------------------------------------------------------------------------
+6. Display empid,dep-id,salary for those employees who earn maximum in
+his department. Eg: king earns highest salary ($24000) in his department(90)
+
+->select 'earns highest salary'||'('|| max(salary) ||')'||'in his department'||' '||department_id 
+from employees
+group by department_id
+having max(salary) in(select max(salary) 
+                      from employees
+                      group by department_id)
+order by department_id;
+------------------------------------------------------------------------------------------------------------------------------
+7. display second highest salary
+
+->select  max(salary) salary
+  from employees
+ where salary < (select max(salary)
+                 from employees); 
+------------------------------------------------------------------------------------------------------------------------------
+8. Display duplicate employee names
+
+->select first_name,last_name
+from employees e1
+where 2<=(select count(last_name)
+            from employees e2
+            where e2.last_name=e1.last_name);
+------------------------------------------------------------------------------------------------------------------------------
+9. Display n^th highest salary where value of 'n' is given by user (i.e if user
+enters 3 then, 3 highest salaries should be displayed)
+
+->select salary
+from employees e1
+where (&n)>=(select count(distinct e2.salary)
+             from employees e2
+             where e1.salary<=e2.salary);
+------------------------------------------------------------------------------------------------------------------------------
+10. The HR department needs a query that prompts the user for an
+employee last name. The query  then displays the last name and hire date
+of any employee in the same department as the  employee whose name
+they supply (excluding that employee). For example, if the user enters 
+Zlotkey, find all employees who work with Zlotkey (excluding Zlotkey).
+
+->select employee_id,last_name,salary,department_id
+from employees
+where department_id= (select department_id
+	             from employees
+	             where last_name='&&name')
+AND
+employee_id <> (select employee_id
+	        from employees
+	        where last_name='&name');
+
+------------------------------------------------------------------------------------------------------------------------------
+11. Create a report that displays the employee number, last name, and
+salary of all employees who  earn more than the average salary. Sort the
+results in order of ascending salary.
+
+->select last_name, employee_id,salary
+from employees
+where salary > (select avg(salary)
+                    from employees)
+order by salary asc;
+------------------------------------------------------------------------------------------------------------------------------
+12. Write a query that displays the employee number and last name of all
+employees who work in a  department with any employee whose last
+name contains the letter ?u.?
+
+->select employee_id, last_name
+from employees 
+where department_id IN (select department_id 
+                        from employees
+                       where last_name like '%u%');
+------------------------------------------------------------------------------------------------------------------------------
+13. The HR department needs a report that displays the last name,
+department number, and job ID  of all employees whose department
+location ID is 1700.
+
+->select last_name, job_id,department_id
+from employees
+where department_id IN (select department_id
+                    from departments
+                    where location_id=1700);
+------------------------------------------------------------------------------------------------------------------------------
+14. Create a report for HR that displays the last name and salary of every
+employee who reports to  King.
+
+->select last_name, salary
+from employees
+where manager_id IN (select manager_id
+                    from employees
+                    where last_name = 'King');
+------------------------------------------------------------------------------------------------------------------------------
+15. Create a report for HR that displays the department number, last
+name, and job ID for every  employee in the Executive department.
+
+->select department_id,last_name,job_id
+from employees
+where department_id IN (select department_id
+                        from departments 
+                        where department_name='Executive');
+------------------------------------------------------------------------------------------------------------------------------
+16. Display only stateid and statename for location under location Toronto
+
+->select first_name,last_name,employee_id,job_id
+from employees
+where department_id=(select department_id
+                      from departments
+                      where location_id=(select location_id
+                                         from locations
+                                         where city='Toronto'));
+------------------------------------------------------------------------------------------------------------------------------
+17. Display statename for city ''Fredericktown"
+
+->select statename
+from states
+where stateid = (select state 
+                 from station
+                 where city='Fredericktown');
+------------------------------------------------------------------------------------------------------------------------------
+18. Write a query to display the last name, department number, and salary
+of any employee whose  department number and salary both match the
+department number and salary of any employee  who earns a commission
+
+->select last_name,department_id,salary
+from employees
+where (salary,department_id)IN(select salary,department_id
+                                   from employees
+                                   where commission_pct IS Not NULL);
+------------------------------------------------------------------------------------------------------------------------------
+19. Display the last name, department name, and salary of any employee
+whose salary and  commission match the salary and commission of any
+employee l ocated in location ID 1700
+
+->select last_name,department_id,salary,commission_pct
+from employees
+where salary IN(select salary
+                from employees join departments
+		using(department_id)
+	         where location_id=1700)
+AND
+nvl(commission_pct,0) IN (select NVL(commission_pct,0)
+                      from employees join departments
+		      using(department_id)
+	              where location_id=1700);
+------------------------------------------------------------------------------------------------------------------------------
+20. Create a query to display the last name, hire date, and salary for all
+employees who have the  same salary and commission as Kochhar. Note:
+Do not display Kochhar in the result set.
+
+->select last_name,hire_date,salary
+from employees
+where(salary,NVL(commission_pct,0))IN(select salary,NVL(commission_pct,0)
+                                      from employees
+                                      where last_name='Kochhar')
+And
+last_name !='Kochhar';
+------------------------------------------------------------------------------------------------------------------------------
+21. Create a query to display the employees who earn a salary that is
+higher than the salary of all of the sales managers (JOB_ID = 'SA_MAN').
+Sort the results on salary from highest to  lowest
+
+->select employee_id,last_name,salary,job_id
+from employees
+where salary >All (select salary
+		  from employees
+		  where job_id = 'SA_MAN')
+order by salary desc;
+------------------------------------------------------------------------------------------------------------------------------
+22. Display the details of the employee ID, last name, and department ID
+of those employees who live in  cities whose name begins with T.
+
+->select employee_id,first_name,last_name
+from employees
+where department_id IN (select department_id
+                        from employees
+                        where first_name LIKE '%T%');
+------------------------------------------------------------------------------------------------------------------------------
+23. Write a query to find all employees who earn more than the average
+salary in their departments.  Display last name, salary, department ID, and
+the average salary for the department. Sort by average salary. Use aliases
+for the columns retrieved by the query as shown in the sample  output.
+
+->select employee_id,last_name,salary,department_id
+from employees e1
+where salary > ( select avg(salary)
+		from employees e2
+		group by department_id
+		having e1.department_id = e2.department_id)
+order by department_id;
+------------------------------------------------------------------------------------------------------------------------------
+24. Write a query to display the employee ID, last names, and department
+names of all employees. Note: Use a scalar subquery to retrieve the
+department name in the SELECT statement.
+
+->select employee_id,last_name,
+(select department_name
+from departments d
+where e.department_id = d.department_id) as dept_name
+from employees e;
+------------------------------------------------------------------------------------------------------------------------------
+25. Write a query to display the last names of the employees who have
+one or more coworkers in their  departments with later hire dates but
+higher salaries.
+             
+->select last_name "Emp" 
+from employees e
+where department_id IN (select department_id
+			from employees e2
+		where e2.department_id = e.department_id
+		and (e2.salary>e.salary
+		and e2.hire_date >e.hire_date));
+------------------------------------------------------------------------------------------------------------------------------

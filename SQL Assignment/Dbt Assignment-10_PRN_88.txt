@@ -1,0 +1,107 @@
+Assignments
+Creating and managing tables and adding constraints
+1. Create table copy_emp same as employees table
+
+->create table copy_emp
+(emp_id number(5),first_name varchar2(20),last_name varchar2(20),salary number);
+
+->select *from copy_emp;
+------------------------------------------------------------------------------------------
+2. Populate the DEPT table with data from the DEPARTMENTS table. Include
+only columns that  you need
+
+->insert into dept
+select department_id,department_name
+from departments;
+
+->select *from dept;
+------------------------------------------------------------------------------------------
+3. Create table EMP and add all necessary constraints.Include only the 
+EMPLOYEE_ID, FIRST_NAME, LAST_NAME, SALARY, and DEPARTMENT_ID
+columns. Name  the columns in your new table ID, FIRST_NAME,
+LAST_NAME, SALARY , and DEPT_ID,  respectively.
+
+->create table emp20
+(emp_id number(5),first_name varchar2(20),last_name varchar2(20),salary number,dept_id number(5));
+
+->>select *from emp20;
+------------------------------------------------------------------------------------------
+4. Truncate table EMP
+
+->truncate table emp20;
+------------------------------------------------------------------------------------------
+5. Drop the EMP table
+
+-> drop table emp20;
+------------------------------------------------------------------------------------------
+6. Now again create table EMP.Add a table-level PRIMARY KEY constraint
+to the EMP table on the ID column. The constraint  should be named at
+creation. Name the constraint my_emp_id_pk.
+
+->create table emp20(emp_id number constraint my_emp_id_pk primary key,emp_name varchar2(20));
+------------------------------------------------------------------------------------------
+7. Create a PRIMARY KEY constraint to the DEPT table using the ID column.
+The constraint should  be named at creation. Name the constraint
+my_deptid_pk.
+
+->create table department(dept_id number constraint my_dept_id_pk primary key,d_name varchar2(20));
+------------------------------------------------------------------------------------------
+8. Modify the EMP table to allow for longer employee last names. Confirm
+your mod ification.
+
+->alter table emp20
+MODIFY
+(last_name varschar2(20));
+------------
+->descr emp20
+------------------------------------------------------------------------------------------
+9. Confirm that both the DEPT and EMP tables are stored in the data
+dictionary. (Hint: USER_TABLES)
+
+->select table_name
+from user_tables
+where table_name IN('Dept','Emp20');
+------------------------------------------------------------------------------------------
+10. Drop the FIRST_NAME column from the EMP table. Confirm your
+modification by checking the description of the table
+
+->alter table emp20
+drop column first_name;
+
+------------
+->descr emp20
+------------------------------------------------------------------------------------------
+11. Add a column DEPT_ID to the EMP table. Add a foreign key reference
+on the EMP table that  ensures that the employee is not assigned to a
+nonexistent depar tment. Name the constraint  my_emp_dept_id_fk.
+
+->alter table emp20
+add(dept_id number(5));
+alter table emp20
+add constraint my_emp_dept_id_fk
+foreign key(dept_id) refrences dept(id);
+------------------------------------------------------------------------------------------
+12. Confirm that the constraints were added by querying the
+USER_CONSTRAINTS view. Note the  types and names of the constraints.
+
+->select constraint_name, constraint_type
+from user_constraints;
+
+
+------------------------------------------------------------------------------------------
+13. Display the object names and types from the USER_OBJECTS data
+dictionary view for the EMP and DEPT tables. Notice that the new tables
+and a new index were created
+
+->select object_name, object_type
+from user_objects;
+
+------------------------------------------------------------------------------------------
+14. Modify the EMP table. Add a COMMISSION column of NUMBER data
+type, precision 2, scale 2.  Add a constraint to the commission column that
+ensures that a co mmission value is greater than  zero
+
+->alter table emp20
+add commission NUMBER(2,2)
+constraint my_emp_comm_ck CHECK (commission >= 0);
+------------------------------------------------------------------------------------------

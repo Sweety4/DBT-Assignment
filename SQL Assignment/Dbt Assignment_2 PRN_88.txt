@@ -1,0 +1,389 @@
+1. Display last_name for employees starting with capital 'A'.
+
+Query:
+select employee_id,last_name
+from employees
+where last_name LIKE 'A%';
+
+output:
+EMPLOYEE_ID LAST_NAME
+----------- -------------------------                                                                                                                       
+        174 Abel
+        166 Ande
+        130 Atkinson
+        105 Austin
+------------------------------------------------------------------------------------------------------------------------
+2. Displayfirst_name for employees containing letter 'e'.
+
+Query:
+select employee_id,first_name,last_name
+from employees
+where first_name LIKE 'E%';
+
+output:
+SQL> @D:\Demo.sql
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME
+----------- -------------------- ---------------------
+        149 Eleni                Zlotkey
+        172 Elizabeth            Bates
+        174 Ellen                Abel
+-------------------------------------------------------------------------------------------------------------------------
+3. Display names for emloyees whose name ends with 's'.
+Query:
+select employee_id,first_name,last_name
+from employees
+where last_name LIKE '%s';
+
+output:
+SQL> @D:\Demo.sql
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME
+----------- -------------------- -------------------------
+        117 Sigal                Tobias
+        119 Karen                Colmenares
+        120 Matthew              Weiss
+        124 Kevin                Mourgos
+        134 Michael              Rogers
+        138 Stephen              Stiles
+        141 Trenna               Rajs
+ 
+---------------------------------------------------------------------------------------------------------------------------
+4. Display names for employees hired in month of March.
+
+Query:
+select employee_id,first_name,last_name,hire_date
+from employees
+where hire_date LIKE '%MAR%';
+
+output:
+SQL> @D:\Demo.sql
+
+EMPLOYEE_ID FIRST_NAME           LAST_NAME                 HIRE_DATE
+----------- -------------------- ------------------------- ---------
+        112 Jose Manuel          Urman                     07-MAR-98
+        128 Steven               Markle                    08-MAR-00
+        143 Randall              Matos                     15-MAR-98
+        147 Alberto              Errazuriz                 10-MAR-97
+        151 David                Bernstein                 24-MAR-97
+        153 Christopher          Olsen                     30-MAR-98
+   
+--------------------------------------------------------------------------------------------------------------------------
+5. Dislay name, salary, job_id for employees having 'REP' in their job_id.
+
+Query:
+select employee_id,last_name,job_id,salary
+from employees
+where job_id like'%REP%';
+
+Output:
+SQL> @D:\Demo.sql
+
+EMPLOYEE_ID LAST_NAME                 JOB_ID         SALARY
+----------- ------------------------- ---------- ----------
+        150 Tucker                    SA_REP          10000
+        151 Bernstein                 SA_REP           9500
+        152 Hall                      SA_REP           9000
+        153 Olsen                     SA_REP           8000
+        154 Cambrault                 SA_REP           7500
+        155 Tuvault                   SA_REP           7000
+        156 King                      SA_REP          10000
+        157 Sully                     SA_REP           9500
+        158 McEwen                    SA_REP           9000
+        159 Smith                     SA_REP           8000
+        160 Doran                     SA_REP           7500
+
+EMPLOYEE_ID LAST_NAME                 JOB_ID         SALARY
+----------- ------------------------- ---------- ----------
+        161 Sewall                    SA_REP           7000
+        162 Vishney                   SA_REP          10500
+        163 Greene                    SA_REP           9500
+        164 Marvins                   SA_REP           7200
+        165 Lee                       SA_REP           6800
+        166 Ande                      SA_REP           6400
+        167 Banda                     SA_REP           6200
+        168 Ozer                      SA_REP          11500
+        169 Bloom                     SA_REP          10000
+        170 Fox                       SA_REP           9600
+        171 Smith                     SA_REP           7400
+
+EMPLOYEE_ID LAST_NAME                 JOB_ID         SALARY
+----------- ------------------------- ---------- ----------
+        172 Bates                     SA_REP           7300
+        173 Kumar                     SA_REP           6100
+        174 Abel                      SA_REP          11000
+        175 Hutton                    SA_REP           8800
+        176 Taylor                    SA_REP           8600
+        177 Livingston                SA_REP           8400
+        178 Grant                     SA_REP           7000
+        179 Johnson                   SA_REP           6200
+        202 Fay                       MK_REP           6000
+        203 Mavris                    HR_REP           6500
+        204 Baer                      PR_REP          10000
+
+33 rows selected.
+
+        
+---------------------------------------------------------------------------------------------------------------------------
+6. Display names for employees containing 2nd last letter 'a' in last_name.
+
+Query:
+select employee_id,last_name
+from employees
+where last_name like '%a_';
+
+Output:
+SQL> @D:\Demo.sql
+
+EMPLOYEE_ID LAST_NAME
+----------- -------------------------
+        101 Kochhar
+        102 De Haan
+        112 Urman
+        117 Tobias
+        123 Vollman
+        144 Vargas
+        160 Doran
+        173 Kumar
+        182 Sullivan
+        202 Fay
+
+10 rows selected.
+---------------------------------------------------------------------------------------------------------------------------
+7. Display names for employees containing  'a' and 'e' both in the full_name.
+
+Query:
+select employee_id,last_name
+from employees
+where first_name like '%a%e%' AND last_name like '%a%e%';
+
+
+
+Output:
+SQL> @D:\Demo.sql
+
+
+EMPLOYEE_ID LAST_NAME
+----------- -------------------------
+        109 Faviet
+        119 Colmenares
+        136 Philtanker
+        146 Partners
+        172 Bates
+        201 Hartstein
+
+6 rows selected.
+
+7 rows selected.
+---------------------------------------------------------------------------------------------------------------------------
+8. Display name, salary,commission for those employees who do not earn commission.
+
+Query:
+select employee_id,last_name,commission_pct
+from employees
+where commission_pct IS NULL;
+
+Output:
+SQL> set NULL NULL
+SQL> @D:\Demo.sql
+
+EMPLOYEE_ID LAST_NAME                 COMMISSION_PCT
+----------- ------------------------- --------------
+        100 King                      NULL
+        101 Kochhar                   NULL
+        102 De Haan                   NULL
+        103 Hunold                    NULL
+        104 Ernst                     NULL
+        105 Austin                    NULL
+        106 Pataballa                 NULL
+
+---------------------------------------------------------------------------------------------------------------------------
+9. Display name, salary for employees having salary not in range 5000 to 12000.
+
+Query:
+select employee_id,last_name,salary
+from employees
+where salary NOT BETWEEN 5000 AND 12000;
+
+Output:
+SQL> @D:\Demo.sql
+
+EMPLOYEE_ID LAST_NAME                     SALARY
+----------- ------------------------- ----------
+        100 King                           24000
+        101 Kochhar                        17000
+        102 De Haan                        17000
+        105 Austin                          4800
+        106 Pataballa                       4800
+        107 Lorentz                         4200
+        115 Khoo                            3100
+        116 Baida                           2900
+        117 Tobias                          2800
+        118 Himuro                          2600
+  
+---------------------------------------------------------------------------------------------------------------------------
+10. Create a report to display last_name,job_id ,hire_date for employees Matos and Taylor in the same query.
+Sort data in ascending order by hire_date.
+
+Query:
+select employee_id,last_name,job_id,salary,hire_date
+from employees
+where last_name='&name'
+order by hire_date asc;
+
+Output:
+SQL> @D:\Demo.sql
+Enter value for name: Matos
+old   3: where last_name='&name'
+new   3: where last_name='Matos'
+
+EMPLOYEE_ID LAST_NAME                 JOB_ID         SALARY HIRE_DATE
+----------- ------------------------- ---------- ---------- ---------
+        143 Matos                     ST_CLERK         2600 15-MAR-98
+
+SQL> @D:\Demo.sql
+Enter value for name: Taylor
+old   3: where last_name='&name'
+new   3: where last_name='Taylor'
+
+EMPLOYEE_ID LAST_NAME                 JOB_ID         SALARY HIRE_DATE
+----------- ------------------------- ---------- ---------- ---------
+        180 Taylor                    SH_CLERK         3200 24-JAN-98
+        176 Taylor                    SA_REP           8600 24-MAR-98
+
+---------------------------------------------------------------------------------------------------------------------------
+11. Dislplay data for employees working in department 20 or 50 and sort in alphabetical order of name.
+
+Query:
+select employee_id,last_name,department_id,salary
+from employees
+where department_id=&did
+order by last_name asc;
+
+Output:
+SQL> @D:\Demo.sql
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID     SALARY
+----------- ------------------------- ------------- ----------
+        130 Atkinson                             50       2800
+        192 Bell                                 50       4000
+        129 Bissot                               50       3300
+        185 Bull                                 50       4100
+        187 Cabrio                               50       3000
+        188 Chung                                50       3800
+        142 Davies                               50       3100
+        186 Dellinger                            50       3400
+        189 Dilly                                50       3600
+        193 Everett                              50       3900
+        202 Fay                                  20       6000
+
+---------------------------------------------------------------------------------------------------------------------------
+12. Display details for employees who earns between 5000 to 17000 and work in department 20 or 50,Sort data in descending order of salary.
+
+Query:
+select employee_id,last_name,salary,department_id
+from employees
+where salary BETWEEN 5000 AND 17000
+OR
+department_id=&did
+order by salary desc;
+
+Output:
+SQL> @D:\Demo.sql
+
+EMPLOYEE_ID LAST_NAME                     SALARY DEPARTMENT_ID
+----------- ------------------------- ---------- -------------
+        201 Hartstein                      13000            20
+        121 Fripp                           8200            50
+        120 Weiss                           8000            50
+        122 Kaufling                        7900            50
+        123 Vollman                         6500            50
+        202 Fay                             6000            20
+        124 Mourgo
+
+---------------------------------------------------------------------------------------------------------------------------
+13. Write a query to display emp_id,last_name,salary for employees working under department which users prompt's while executing query.
+
+Query:
+undefine did
+select employee_id,last_name,salary,department_id
+from employees
+where department_id=&&did; 
+
+Output:
+SQL> @D:\Demo.sql
+Enter value for did: 20
+old   3: where department_id=&&did
+new   3: where department_id=20
+
+EMPLOYEE_ID LAST_NAME                     SALARY DEPARTMENT_ID
+----------- ------------------------- ---------- -------------
+        201 Hartstein                      13000            20
+        202 Fay                             6000            20
+
+SQL> @D:\Demo.sql
+Enter value for did:
+---------------------------------------------------------------------------------------------------------------------------
+14. Write a query to display emp_id,last_name,salary for employees earning salary specified by user and sort data on the 
+basis of user specified column.
+
+Query:
+select employee_id,last_name,department_id,salary
+from employees
+where salary =&sal
+order by &col;
+
+Output:
+SQL> @D:\Demo.sql
+Enter value for sal: 2500
+old   3: where salary =&sal
+new   3: where salary =2500
+old   4: order by &col
+new   4: order by salary
+
+EMPLOYEE_ID LAST_NAME                 DEPARTMENT_ID     SALARY
+----------- ------------------------- ------------- ----------
+        119 Colmenares                           30       2500
+        131 Marlow                               50       2500
+        140 Patel                                50       2500
+        144 Vargas                               50       2500
+        182 Sullivan                             50       2500
+        191 Perkins                              50       2500
+
+6 rows selected.
+
+---------------------------------------------------------------------------------------------------------------------------
+15. Display salary for employees whose salary is not equal to 2500 or 3500 or 7000.
+
+Query:
+select employee_id,last_name,salary
+from employees
+where salary NOT IN(2500 , 3500 , 7000);
+
+Output:
+SQL> @D:\Demo.sql
+
+EMPLOYEE_ID LAST_NAME                     SALARY
+----------- ------------------------- ----------
+        100 King                           24000
+        101 Kochhar                        17000
+        102 De Haan                        17000
+        103 Hunold                          9000
+        104 Ernst                           6000
+        105 Austin                          4800
+        106 Pataballa                       4800
+        107 Lorentz                         4200
+        108 Greenberg                      12000
+        109 Faviet                          9000
+        110 Chen                            8200
+
+---------------------------------------------------------------------------------------------------------------------------
+16.Try out same queries (wherever applicable) with substitution variable.
+
+Query:
+select employee_id,last_name,department_id
+from employees
+where last_name='&name';
+
+
+---------------------------------------------------------------------------------------------------------------------------

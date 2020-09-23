@@ -1,0 +1,156 @@
+Set Operators:
+
+->descr job_history;
+--------------------------------------------------------------------------
+->descr *from job_history;
+--------------------------------------------------------------------------
+->select employee_id,job_id
+  from employees
+  where employee_id=176;
+--------------------------------------------------------------------------
+->select employee_id,job_id
+  from employees
+  where employee_id=101;
+---------------------------------------------------------------------------
+UNION:
+->select employee_id,job_id
+from employees
+UNION
+select employee_id,job_id
+from job_history;
+------------------------------------------------------------------------------
+UNION ALL:
+->select employee_id,job_id
+from employees
+UNION ALL
+select employee_id,job_id
+from job_history;
+------------------------------------------------------------------------------
+Using order by clause:
+->select employee_id,job_id
+from employees
+UNION ALL
+select employee_id,job_id
+from job_history
+order by employee_id;
+-----------------------------------------------------------------------------
+INTRSECT:
+->select employee_id,job_id
+from employees
+INTERSECT
+select employee_id,job_id
+from job_history
+order by employee_id;
+
+------------------------------------------------------------------------------
+MINUS:               
+->select employee_id,job_id
+from employees
+MINUS
+select employee_id,job_id
+from job_history
+order by employee_id;
+------------------------------------------------------------------------------
+MINUS:
+Q. Display employee_id those who don't changed their job.
+->select employee_id
+from employees
+MINUS
+select employee_id
+from job_history
+order by employee_id;
+------------------------------------------------------------------------------
+using dumy column:
+->select employee_id,job_id,last_name
+from employees
+UNION 
+select employee_id,job_id,null
+from job_history
+order by employee_id;
+
+OR:
+select employee_id,job_id,last_name
+from employees
+UNION
+select employee_id,job_id,to_char(null)
+from job_history
+order by employee_id;
+------------------------------------------------------------------------------
+
+->select employee_id,job_id,salary
+from employees
+UNION
+select employee_id,job_id,0
+from job_history
+order by employee_id;
+------------------------------------------------------------------------------
+using alis name:
+->select employee_id,job_id,last_name name
+from employees
+UNION
+select employee_id,job_id,to_char(null)
+from job_history
+order by employee_id;
+--------------------------------------------------------------------------------
+
+1. The HR department needs a list of department IDs for departments that
+do not contain the job  ID ST_CLERK. Use the set operators to create this
+report.
+
+->select department_id
+from departments
+MINUS
+select department_id
+from employees
+where job_id='ST-CLERK';
+------------------------------------------------------------------------------
+2. The HR department needs a list of countries that have no departments
+located in them. Display  the country ID and the name of the countries.
+
+->select country_id,country_name
+from countries 
+MINUS
+select l.country_id,c.country_name
+from locations l,countries c
+where l.country_id=c.country_id;
+------------------------------------------------------------------------------
+3. Produce a list of jobs for departments 10, 50, and 20. Display the job ID
+and  department ID by using the set operators.
+
+->select job_id,department_id
+from employees
+where department_id=10
+UNION
+select job_id,department_id
+from employees
+where department_id=50
+UNION
+select job_id,department_id
+from employees
+where department_id=20;
+
+------------------------------------------------------------------------------
+4. Create a report that lists the employee IDs and job IDs of those
+employees who currently have a  job title that is the same as their job title
+when they were initially hired by the company (that is,  they changed jobs
+but have now gone back to doing their original job).
+
+->select employee_id,job_id
+from employees
+INTERSECT
+select employee_id,job_id
+from job_history;
+------------------------------------------------------------------------------
+5. The HR department needs a report with the following specifications:
+Last name and department ID of all employees from the EMPLOYEES
+table, regardless of whether or not they belong to a department
+Department ID and department name of all departments from the
+DEPARTMENTS table, regardless of whether or not they have
+employees working in them  Write a single query to accomplish this.
+
+->select last_name,department_id,to_char(NULL)
+from employees
+UNION
+select to_char(NULL),department_id,department_name
+from departments;
+------------------------------------------------------------------------------

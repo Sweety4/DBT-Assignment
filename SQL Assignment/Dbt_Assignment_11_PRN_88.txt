@@ -1,0 +1,59 @@
+sAssignments
+Views
+1. Create a view called EMPLOYEES_VU based on the employee numbers,
+employee names, and  department numbers from the EMPLOYEES table.
+Change the heading for the employee name to  EMPLOYEE.Display the
+contents of the EMPLOYEES_VU view.
+
+->create or replace view 
+employees_vu(emp_id,ename,dept_id)
+AS
+select employee_id,concat(first_name,concat(' ',last_name)),department_id
+from employees;
+
+----------------
+-> select *from employees_vu;
+-----------------------------------------------------------------------------------------------------------
+2. Select the view name and text from the USER_VIEWS data dictionary
+view.
+
+->select view_name,text
+from user_views;
+-----------------------------------------------------------------------------------------------------------
+3. Using your EMPLOYEES_VU view, enter a query to display all employee
+names and department  numbers.
+
+->select ename,dept_id
+from employees_vu;
+-----------------------------------------------------------------------------------------------------------
+4. Create a view named DEPT50 that contains the employee numbers,
+employee last names, and  department numbers for all employees in
+department 50. Label the view columns EMPNO, EMPLOYEE, and DEPTNO.
+Do not allow an employee to be reassigned to another department
+through the view
+
+->create view dept50(empno,employee,deptno) 
+As
+select employee_id,last_name,department_id
+from employees
+where department_id=50;
+------------
+->select * from dept50;
+-----------------------------------------------------------------------------------------------------------
+5. Create a view called SALARY_VU based on the employee last names,
+department names, salaries,  and salary grades for all employees. Use the
+EMPLOYEES, DEPARTMENTS, and JOB_GRADES  tables. Label the columns
+Employee, Department, Salary, and Grade, respectively.
+
+->create or replace view salary_vu(Employee,Department,Salary,Grades)
+As
+select last_name,department_name,salary,grade
+from employees e1 ,departments d1,
+salgrade s1
+where e1.department_id=d1.department_id
+and
+(e1.salary Between s1.losal and s1.hisal);
+
+------------
+->select *from salary_vu;
+-----------------------------------------------------------------------------------------------------------

@@ -1,0 +1,148 @@
+DDL:(Data Definition language)
+->create table employee(emp_id number(5),ename varchar2(30),join_date date,salary number);
+
+OR
+->create table employee(emp_id number(5),ename varchar2(30),join_date date default sysdate);
+
+-----------------------------------------------------------------------------------------------------
+DML(Insert):(DataManuplation language)
+->create table employee(emp_id number(5),ename varchar2(30),join_date date default sysdate);
+-----------------------------------------------------------------------------------------------------
+
+->insert into employee
+values(11,'Jerry','12-Jul-15');
+-----------------------------------------------------------------------------------------------------
+
+->select *from employee;
+-----------------------------------------------------------------------------------------------------
+
+->insert into employee
+values(12,'Jerry',default);
+-----------------------------------------------------------------------------------------------------
+
+->insert into employee(emp_id,ename)
+values(13,'Jerry');
+-----------------------------------------------------------------------------------------------------
+->insert into employee(ename,join_date,emp_id)
+values('Jerry','21-Mar-12',14);
+-----------------------------------------------------------------------------------------------------
+->insert into employee
+values(15,'Sam',to_date('11 January ,05','DD MONTH,RR'));
+-----------------------------------------------------------------------------------------------------
+Using substitution variable:
+->insert into employee
+values(&eid,'&name','&jdate');
+-----------------------------------------------------------------------------------------------------
+Q.Inserting values from one existing table into other existing table.
+OR
+Q.Insert using sub-query(i.e without values clause)
+
+->insert into employee(emp_id,ename,join_date)
+select employee_id,first_name||' 'last_name,hire_date
+from employees
+where department_id=90;
+-----------------------------------------------------------------------------------------------------
+TCL:
+->commit;   //used to save data permanantly in database explicitly using commit statement
+
+to make changes permenent in your table/datebase it will commit (i.e.save)all DML operation
+preceding it,till,
+1)last commit is encounterd
+2)encounters any DDL statement
+3)it encounters any statement
+-----------------------------------------------------------------------------------------------------
+->rollback;
+
+Use to not save changes permently in database it will rollback(undo)
+all DML operations preceding it,till,
+1)last commit is encounterd
+2)encounters any DDL statement
+3)it encounters any statement
+
+-----------------------------------------------------------------------------------------------------
+DML(Update):
+->update employee
+set salary=10000;
+-----------------------------------------------------------------------------------------------------
+->update employee
+set salary=10000
+where ename ='TOm';
+-----------------------------------------------------------------------------------------------------
+->update employee
+set salary=30000
+where ename ='Sam';
+-----------------------------------------------------------------------------------------------------
+->update employee
+set ename='teena'
+where emp_id=13;
+-----------------------------------------------------------------------------------------------------
+->update employee
+set salary=30000
+where emp_id=12;
+-----------------------------------------------------------------------------------------------------
+->update employee
+set salary=&sal
+where emp_id=&eid;
+-----------------------------------------------------------------------------------------------------
+
+Assignments
+Manupilating Data
+1. Run the statement to build the MY_EMPLOYEE table to be used for the
+lab.
+
+->create table my_employee(emp_id number(5),first_name varchar2(20),last_name varchar2(20),salary number);
+
+-----------------------------------------------------------------------------------------------------
+2. "Add the first row of data to the MY_EMPLOYEE table . Do not list the 
+columns in the INSERT clause.Make the data additions permanent."
+
+->insert into my_employee
+values(1,'Sweety','Jangale',10000);
+-----------------------------------------------------------------------------------------------------
+3. Populate the MY_EMPLOYEE table with the second row of sample data
+from the preceding list. This  time, list the columns explicitly in the INSERT
+clause
+
+->insert into my_employee(emp_id,first_name,last_name,salary)
+values(2,'Sam','Patani',20000);
+-----------------------------------------------------------------------------------------------------
+4. Write an INSERT statement in a text file named loademp.sql to load rows
+into the  MY_EMPLOYEE table. Concatenate the first letter of the first name
+and the first seven characters of  the last name to produce the user ID.
+
+->insert into my_employee
+select emp_id,substr(first_name,1,1)||' ',substr(last_name,1,7),salary
+from my_employee;
+
+
+-----------------------------------------------------------------------------------------------------
+5. Change the last name of employee 3 to Drexler
+
+->update my_employee
+set last_name='Drexler'
+where emp_id=3;
+-----------------------------------------------------------------------------------------------------
+6. Change the salary to 1000 for all employees with a salary less than
+900.Verify your changes to the table.
+
+->update my_employee
+set salary=1000
+where salary<900;
+-----------------------------------------------------------------------------------------------------
+7. Delete an employee from the MY_EMPLOYEE table. Prompt user on
+screen for first_name
+->delete
+from my_employee
+where first_name = 'Sweety';
+-----------------------------------------------------------------------------------------------------
+8. Try all these:: Mark an intermediate point in the processing of the
+transaction. Empty the entire table.Confirm that the table is empty.
+->savepoint A;
+->select *from my_employee;
+-----------------------------------------------------------------------------------------------------
+9. Discard the most recent DELETE operation without discarding the earlier
+INSERT operation.Confirm that the new row is still intact
+
+->Rollback to A;
+->select *from my_employee;
+-----------------------------------------------------------------------------------------------------
